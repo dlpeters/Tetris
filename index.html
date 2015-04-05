@@ -6,10 +6,7 @@
     <title>Tetris</title>
 
     <script language="javascript">
-        window.onload = function main() {
-            game = BulkImageLoader();
-            game.addImage(".", "bg.png");
-        }
+
 
     </script>
 </head>
@@ -29,6 +26,104 @@
 <script type="text/javascript" src="js/BulkImageLoader.js"></script>
 
 <script type="text/javascript">
+
+    var ROWS = 20;
+    var COLS = 10;
+    var SIZE = 32;
+
+    var canvas;
+    var ctx;
+    var blockImg;
+    var BgImg;
+    var gameOverImg;
+    var curPiece;
+    var gameData;
+    var ImgLoader;
+    var prevTime;
+    var curTime;
+    var isGameOver;
+    var lineSpan;
+    var curLines;
+
+    window.onload = onReady;
+
+    function onReady()
+    {
+        imgLoader = new BulkImageLoader();
+        imgLoader.addImage("blocks.png", "blocks");
+        imgLoader.addImage("bg.png", "bg");
+        imgLoader.addImage("over.png", "gameover");
+        imgLoader.onReadyCallback = onImagesLoaded;
+        imgLoader.loadImages();
+
+        canvas = document.getElementById('gameCanvas');
+        ctx = canvas.getContext('2d');
+        lineSpan = document.getElementById('lines');
+
+        preTime = curTime = 0;
+
+        document.onkeydown = getInput;
+    }
+
+    function onImagesLoaded(e){
+        blockImg = imgLoader.getImageAtIndex(0);
+        bgImg = imgLoader.getImageAtIndex(1);
+        gameOverImg = imgLoader.getImageAtIndex(2);
+
+        initGame();
+
+    }
+
+    function initGame()
+    {
+        var r, c;
+        curLines =0;
+        isGameOver = false;
+
+        if (gameData == undefined)
+        {
+            gameData = new Array();
+            for (r=0; r < ROWS; i++)
+            {
+                gameData[r] = new Array();
+                for (c=0; c< COLS; c++)
+                {
+                    gameData[r].push(o);
+                }
+            }
+        }
+        else
+        {
+            for (r=0; r<ROWS; r++)
+            {
+               for (c=0; c < COLS; c++)
+               {
+                   gameData[r][c] = 0;
+               }
+            }
+        }
+        curPiece = getRandomPiece();
+        lineSpan.innerHTML = curLines.toString();
+
+        // check all browser prefixes to make sure we get the function
+        var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame() |
+                        window.webkitCancelRequestAnimationFrame() || window.msRequestAnimationFrame();
+
+        // request that animation function be called before the browser performs the next repaint.
+        window.requestAnimationFrame = requestAnimationFrame;
+        requesAnimationFrame(update);
+    }
+
+    function update(){
+        curTime = new Date().getTime();
+
+        if (curTime - prevTime > 500)
+        {
+            // update the game piece
+            // update time
+            prevTime = curTime;
+        }
+    }
 
 </script>
 </body>
