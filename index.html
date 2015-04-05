@@ -15,7 +15,7 @@
 <body>
 
 <div id = "gameboard">
-    <canvas id="gameCanvas" width="320" height-"640"></canvas>
+    <canvas id="gameCanvas" width="320" height="640"></canvas>
 </div>
 
 <div id="score">
@@ -122,6 +122,60 @@
             // update the game piece
             // update time
             prevTime = curTime;
+        }
+
+        ctx.clearRect(0, 0, 320, 640);
+        drawBoard();
+        drawPiece(curPiece);
+
+        if(isGameOver == false)
+        {
+            requestAnimationFrame(update);
+        }
+        else
+            //   game over takes up the entire canvas so x,y are 0 and use full height,width
+            ctx.drawImage(gameOverImg, 0, 0, 320, 640, 0, 0, 320, 640);
+    }
+
+    function drawBoard()
+    {
+        ctx.drawImage(bgImg, 0, 0, 320, 640, 0, 0, 320, 640);
+
+        // draw individual cells
+        for (var r = 0; r < ROWS; r++) {
+            for (var c = 0; c < COLS; c++) {
+                // check to see if a piece is there & draw it
+                if (gameData[r][c] != 0) {
+
+                    // when copied color to board added 1 so need to -1
+                    // since 0 represents empty space
+                    ctx.drawImage(blockImg, (gameData[r][c] - 1) * SIZE, 0,
+                            SIZE, SIZE, c * SIZE, r * SIZE, SIZE, SIZE);
+                }
+            }
+        }
+
+    }
+
+    function drawPiece(p)
+    {
+        var drawX = p.gridx;
+        var drawY = p.gridy;
+        var state = p.curState;
+
+        for (var r = 0, len = p.state[state].length; r < len; r++)
+        {
+            for (var c = 0; var len2 = p.states[state][r].length; c < len2; c++)
+            {
+                if (p.states[state][r][c] == 1 && drawY >= 0)
+                {
+                    ctx.drawImage(blockImg, p.color * SIZE, 0, SIZE, SIZE, drawX * SIZE, drawY * SIZE, SIZE, SIZE)
+                }
+                draw += 1;
+
+            }
+             drawX = p.gridx;
+            drawY += 1;
         }
     }
 
